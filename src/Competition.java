@@ -41,11 +41,17 @@ public class Competition {
 		if (player1.getPlayerType() == HUMAN || player2.getPlayerType() == HUMAN) verboseMode = true;
 
 		Competition competition = new Competition(player1, player2, verboseMode);
-		competition.playMultiple(numGames);
+		competition.playMultipleRounds(numGames);
 		
 		scanner.close();
 	}
 
+	/**
+	 *
+	 * @param player1 first player
+	 * @param player2 second player to compete against
+	 * @param displayMessage true if user wants to display massages regarding moves, false if not.
+	 */
 	public Competition(Player player1, Player player2, boolean displayMessage){
 		p1Score = 0;
 		p2Score = 0;
@@ -55,7 +61,11 @@ public class Competition {
 
 	}
 
-	public void playMultiple(int numRounds){
+	/**
+	 *Run the game for the given number of rounds.
+	 * @param numRounds number of rounds to play the competition for.
+	 */
+	public void playMultipleRounds(int numRounds){
 		System.out.println("Starting a Nim competition of "+numRounds+" rounds" +
 				" between a "+player1.getTypeName()+" player" +
 				"and a "+player2.getTypeName()+" player");
@@ -69,6 +79,11 @@ public class Competition {
 		System.out.println("The result are "+getPlayerScore(PLAYER1)+":"+getPlayerScore(PLAYER2));
 	}
 
+	/**
+	 * A function that runs a single round of nim between two player of the competition.
+	 * @param board board object on which to play on (ideally blank at start)
+	 * @return the WINNER!!!!
+	 */
 	private Player playSingle(Board board){
 		Player currentPlayer = player1;
 		while (board.getNumberOfUnmarkedSticks()> 0){
@@ -84,10 +99,6 @@ public class Competition {
 
 				} else {
 					displayMessage("Invalid move. Enter another:");
-					System.out.println(board);
-					System.out.println(playerMove);
-					System.exit(0);
-
 				}
 			}
 		}
@@ -96,6 +107,12 @@ public class Competition {
 
 	}
 
+	/**
+	 * gets score of the player.
+	 * @param playerPosition ID of the player
+	 * @return If playerPosition = 1, the results of the first player is returned. If playerPosition = 2,
+	 * the result of the second player is returned. If playerPosition equals neither, -1 is returned.
+	 */
 	public int getPlayerScore(int playerPosition){
 		if (playerPosition == 1){
 			return p1Score;
@@ -105,17 +122,30 @@ public class Competition {
 		return -1;
 	}
 
+	/**
+	 * takes a player, and adds a point to his score.
+	 * @param winner a player who won the round
+	 */
 	private void addPoint(Player winner){
 		if (winner.getPlayerId() == 1){
 			p1Score++;
 		} else p2Score++;
 	}
 
+	/**
+	 * A function alternating between two player.
+	 * @param currentPlayer the player whose currently plating
+	 * @return the player whose currently NOT playing
+	 */
 	private Player otherPlayer(Player currentPlayer){
 		if (currentPlayer.getPlayerId() == 1) return player2;
 		else return player1;
 	}
 
+	/**
+	 * If verbose mode is on for the competition, prints the string. If off, does nothing.
+	 * @param stringToDisplay the message to display to the user if verbose mode is on
+	 */
 	private void displayMessage(String stringToDisplay){
 		if (displayMessage) {
 			System.out.println(stringToDisplay);

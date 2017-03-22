@@ -125,20 +125,26 @@ public class Player {
 		}
 	}
 
-	/*
-	 * Produces a random move.
+	/**
+	 * get a random move to play. guaranteed to be a valid move.
+	 * @param board a board to play the move on.
+	 * @return A guaranteed valid random move.
 	 */
 	private Move produceRandomMove(Board board){
 		while (true){
-			Move randomMove = totallyRandom(board);
+			Move randomMove = totallyRandomMove(board);
 			if (isMoveValid(randomMove, board)){
 				return randomMove;
 			}
 		}
 	}
 
-
-	private Move totallyRandom(Board board){
+	/**
+	 * Gets a totally random move, within the board parameters. (will never returns out of bounds move)
+	 * @param board board to get move for.
+	 * @return A random move within the board parameters.
+	 */
+	private Move totallyRandomMove(Board board){
 		int randomRow = random.nextInt(board.getNumberOfRows()) + 1;
 		int randomRowLength = board.getRowLength(randomRow);
 		int randomLeftStick = random.nextInt(randomRowLength) + 1;
@@ -147,6 +153,13 @@ public class Player {
 		return new Move(randomRow,randomLeftStick,randomRightStick);
 	}
 
+	/**
+	 * Assuming inputted move is within board bounds.
+	 * checks if the move inputted is valid from the marked sticks perspectives.
+	 * @param move a move to check
+	 * @param board a board to check validity on.
+	 * @return true if the move is valid. false if invalid.
+	 */
 	private boolean isMoveValid(Move move, Board board){
 		boolean valid = true;
 		for(int j=move.getLeftBound();j<=move.getRightBound();j++) {
@@ -166,16 +179,20 @@ public class Player {
 		/* You need to implement this method */
 	}
 
-	/*
-	 * Interact with the user to produce his move.
+	/**
+	 * Produce a move according to inputs by the player.
+	 * @param board a board to play the move on (or display the current state of the game)
+	 * @return A move dictated by user inputs
 	 */
 	private Move produceHumanMove(Board board){
 		while (true){
 			System.out.println("Press 1 to display the board. Press 2 to make a move:");
 			int userDecision = scanner.nextInt();
+
 			if (userDecision == DISPLAY_BOARD){
 				System.out.println(board);
-			} else if (userDecision == 2){
+
+			} else if (userDecision == MAKE_MOVE){
 				System.out.println("Enter the row number:");
 				int rowNumber = scanner.nextInt();
 				System.out.println("Enter the index of the leftmost stick:");
@@ -183,6 +200,7 @@ public class Player {
 				System.out.println("Enter the index of the rightmost stick:");
 				int rightBound = scanner.nextInt();
 				return new Move(rowNumber, leftBound, rightBound);
+
 			} else {
 				System.out.println("Unsupported command");
 			}
