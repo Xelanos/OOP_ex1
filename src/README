@@ -1,0 +1,44 @@
+xelanos
+
+
+                                         README for ex1: Nim
+
+==============================================================================================================
+                                           =  Description  =
+==============================================================================================================
+Competition.java - a class representing a nim competition, manges the game.
+Move.java - a class representing a move by some player
+Player.java - a class representing a single player in the competition.
+Board.java - a class representing a board on which to play on.
+
+
+==============================================================================================================
+                                              =  Design  =
+==============================================================================================================
+Design was pre-given.
+
+
+
+==============================================================================================================
+                                       =  Implementation Issues  =
+==============================================================================================================
+The random player - at first i had a problem with the validity of the moves returned by the player.
+so as to not copy code, I've made the random numbers to generate only valid moves and then
+check in the moves if there are matched sticks.
+
+Competition - player scores implemented as private within competition, something I would not have done
+ normally because in my opinion it should be a parameter of the player.
+
+
+==============================================================================================================
+                                        =  Answers to Questions  =
+==============================================================================================================
+The Smart Player:
+My smart player plays randomly until the board has 5 unmarked sticks remaining, from this point it
+gets interesting - the player checks how many stick are left unmarked, and acts based on that:
+His goal is to always keep the board with odd numbers of stick left after his turn,  because if the
+other player is left with only 1 (which is odd) he loses, so if we strive to leave the board
+with odd AFTER our turn, we have the most chances to leave to other player with 1, we will make
+our player win.
+This is a pretty "dumb" way for a smart player and based a lot on luck,
+ but hey, it beats random 75% of the times!

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -131,12 +132,15 @@ public class Player {
 	 * @return A guaranteed valid random move.
 	 */
 	private Move produceRandomMove(Board board){
-		while (true){
-			Move randomMove = totallyRandomMove(board);
-			if (isMoveValid(randomMove, board)){
-				return randomMove;
-			}
-		}
+	    if (board.getNumberOfUnmarkedSticks() > 1){
+            while (true){
+                Move randomMove =  totallyRandomMove(board);
+                if (isMoveValid(randomMove, board)){
+                    return randomMove;
+                }
+            }
+        } else return removeOneMove(board); // last stick is not random , better just to search for it.
+
 	}
 
 	/**
@@ -174,12 +178,84 @@ public class Player {
 	 * Produce some intelligent strategy to produce a move
 	 */
 	private Move produceSmartMove(Board board){
-		Move move = new Move(1,1,1);
-		return move;
-		/* You need to implement this method */
-	}
+		Move smartMove;
+		// plays dumb until the end to make it more efficient.
+		if (board.getNumberOfUnmarkedSticks() > 6){
+			while (true){
+				smartMove = totallyRandomMove(board);
+				if (isMoveValid(smartMove, board)){
+					return smartMove;
+				}
+			}
+		} else {
+			smartMove = calculatedMove(board);
+			if (isMoveValid(smartMove, board)) {
+				return smartMove;
+			}
+		}
+        return smartMove;
+    }
 
 	/**
+	 * get a move which is a calculated  move towards VICTORY!!! see implementation notes for explanation
+	 * @param board a board to play the move on.
+	 * @return a smart move to play on the board.
+	 */
+	private Move calculatedMove(Board board) {
+	    if (board.getNumberOfUnmarkedSticks() % 2 == 1){
+            return removeTwoMove(board);
+        }
+        else if (board.getNumberOfUnmarkedSticks() % 2 == 0) {
+            return removeOneMove(board);
+
+        }
+        return null; // will not get to this
+    }
+
+    /**
+     * returns a valid move which markes two matches. if can't find a valid two-match move, returns a single
+     * match move.
+     * @param board board to check move from
+     * @return
+     */
+    private Move removeTwoMove(Board board) {
+	    Move twoMove;
+	    int potentialTwoStartStick;
+	    int potentialTwoEndStick;
+        for (int row=1 ; row<= board.getNumberOfRows(); row++){
+            for (int stick=1; stick <= board.getRowLength(row); stick++){
+                if (board.isStickUnmarked(row,stick)){
+                    potentialTwoStartStick = stick;
+                    potentialTwoEndStick = potentialTwoStartStick + 1;
+                    if (potentialTwoEndStick <= board.getRowLength(row)){
+                        if (board.isStickUnmarked(row , potentialTwoEndStick)){
+                            twoMove = new Move(row, potentialTwoStartStick, potentialTwoEndStick);
+                            return twoMove;
+                        }
+                    }
+                    twoMove = new Move(row, potentialTwoStartStick, potentialTwoStartStick);
+                    return twoMove;
+                }
+            }
+        }
+        return null; // will not get to this line
+    }
+
+    private Move removeOneMove(Board board) {
+	    Move removeOne = null;
+	    for (int i=1 ; i<= board.getNumberOfRows(); i++){
+	        for (int j=1; j <= board.getRowLength(i); j++){
+	            if (board.isStickUnmarked(i,j)){
+	                removeOne = new Move(i,j,j);
+	                return removeOne;
+                }
+            }
+        }
+        return removeOne;
+    }
+
+
+    /**
 	 * Produce a move according to inputs by the player.
 	 * @param board a board to play the move on (or display the current state of the game)
 	 * @return A move dictated by user inputs

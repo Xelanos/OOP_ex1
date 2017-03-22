@@ -67,8 +67,8 @@ public class Competition {
 	 */
 	public void playMultipleRounds(int numRounds){
 		System.out.println("Starting a Nim competition of "+numRounds+" rounds" +
-				" between a "+player1.getTypeName()+" player" +
-				"and a "+player2.getTypeName()+" player");
+				" between a "+player1.getTypeName()+" player " +
+				"and a "+player2.getTypeName()+" player.");
 		for (int i=0; i < numRounds; i++){
 			Board board = new Board();
 			displayMessage("Welcome to the sticks game!");
@@ -76,7 +76,7 @@ public class Competition {
 			addPoint(winner);
 
 		}
-		System.out.println("The result are "+getPlayerScore(PLAYER1)+":"+getPlayerScore(PLAYER2));
+		System.out.println("The results are "+getPlayerScore(PLAYER1)+":"+getPlayerScore(PLAYER2));
 	}
 
 	/**
@@ -93,16 +93,17 @@ public class Competition {
 				int valid = board.markStickSequence(playerMove);
 				if (valid == 0){
 					displayMessage("Player "+currentPlayer.getPlayerId()+
-							", made the move: "+playerMove);
+							" made the move: "+playerMove);
 					currentPlayer = otherPlayer(currentPlayer);
 					break;
 
 				} else {
 					displayMessage("Invalid move. Enter another:");
+
 				}
 			}
 		}
-		displayMessage("player "+currentPlayer.getPlayerId()+" won!");
+		displayMessage("Player "+currentPlayer.getPlayerId()+" won!");
 		return currentPlayer;
 
 	}
